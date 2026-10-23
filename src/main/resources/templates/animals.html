@@ -12,36 +12,42 @@
 
 <!-- Navigation — same on every page -->
 <nav>
+  <a class="brand" href="/">Animal Shelter</a>
   <a href="/">Home</a>
-  <a href="/animals">All animals</a>
+  <a href="/animals" class="active" aria-current="page">All animals</a>
   <a href="/animals/new">Add animal</a>
 </nav>
 
 <main>
   <h1>Shelter Animals</h1>
 
+  <p class="subtitle">Meet the animals waiting for a home.</p>
+
   <section aria-label="Animal list">
-    <ul>
-      <li th:each="animal : ${animals}">
+    <ul class="animal-grid">
+      <li class="animal-card" th:each="animal : ${animals}">
         <img th:src="${animal.imageUrl}"
              th:alt="${animal.name}"
              width="300"
              height="200"
              style="object-fit: cover;">
         <div class="info">
-          <strong th:text="${animal.name}">Name</strong>
-          — <span th:text="${animal.type}">Type</span>
-          | <span th:text="${animal.breed}">Breed</span>
-          | Age: <span th:text="${animal.age}">0</span>
-          <span th:text="${animal.status}"
-                th:class="${animal.status.name() == 'AVAILABLE'} ? 'status-available' : 'status-adopted'">STATUS</span>
-          <p th:text="${animal.description}">Description</p>
+          <h2 th:text="${animal.name}">Name</h2>
+          <p class="meta">
+            <span th:text="${animal.type}">Type</span>
+            · <span th:text="${animal.breed}">Breed</span>
+            · Age: <span th:text="${animal.age}">0</span>
+          </p>
+          <span class="badge"
+                th:text="${animal.status}"
+                th:classappend="${animal.status.name() == 'AVAILABLE'} ? 'status-available' : 'status-adopted'">STATUS</span>
+          <p class="description" th:text="${animal.description}">Description</p>
         </div>
       </li>
     </ul>
   </section>
 
-  <a href="/animals/new">Add new animal</a>
+  <a href="/animals/new" class="btn">Add new animal</a>
 </main>
 
 </body>
