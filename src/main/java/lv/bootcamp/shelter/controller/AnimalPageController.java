@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lv.bootcamp.shelter.service.AnimalService;
 import org.springframework.stereotype.Controller;
 import lv.bootcamp.shelter.form.AnimalForm;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -28,4 +30,11 @@ public class AnimalPageController {
         model.addAttribute("form",new AnimalForm(null,null,null,null,null,null));
         return "animals-new";
     }
+
+    @PostMapping("/animals")
+    public  String createAnimal(@ModelAttribute("form") AnimalForm form){
+       animalService.createFromForm(form);
+       return "redirect:/animals";
+    }
+
 }
