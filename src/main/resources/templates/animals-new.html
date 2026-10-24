@@ -23,31 +23,49 @@
     <p class="subtitle">Register a new arrival at the shelter.</p>
     <div class="form-card">
     <form th:action="@{/animals}" th:object="${form}" method="post">
+      <div class="alert" role="alert" th:if="${#fields.hasErrors('*')}">
+        <p>Please fix the following:</p>
+        <ul>
+          <li th:each="err : ${#fields.allErrors()}" th:text="${err}">Error message</li>
+        </ul>
+      </div>
+
 
       <label for="name">Name</label>
-      <input id="name" th:field="*{name}" type="text" required placeholder="e.g. Milo"
+      <input id="name" th:field="*{name}" th:classappend="${#fields.hasErrors('name')} ? 'invalid'"
+             type="text" placeholder="e.g. Milo">
+      <p class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</p>
 
       <label for="type">Type</label>
-      <select id="type"  th:field="*{type}" >
+      <select id="type"  th:field="*{type}" th:classappend="${#fields.hasErrors('type')} ? 'invalid'" >
+
         <option value="">— choose —</option>
         <option value="CAT">Cat</option>
         <option value="DOG">Dog</option>
         <option value="OTHER">Other</option>
+
       </select>
+      <p class="error" th:if="${#fields.hasErrors('type')}" th:errors="*{type}">Type error</p>
+
 
       <label for="breed">Breed</label>
-      <input id="breed"  th:field="*{breed}"  type="text" placeholder="e.g. Siamese">
+      <input id="breed" th:field="*{breed}" th:classappend="${#fields.hasErrors('breed')} ? 'invalid'"
+             type="text" placeholder="e.g. Siamese">
+      <p class="error" th:if="${#fields.hasErrors('breed')}" th:errors="*{breed}">Breed error</p>
 
       <label for="age">Age (years)</label>
-      <input id="age"  th:field="*{age}"  type="number" min="0" placeholder="e.g. 3">
+      <input id="age"  th:field="*{age}"  th:classappend="${#fields.hasErrors('age')} ? 'invalid'"
+             type="number" min="0" placeholder="e.g. 3">
+      <p class="error" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age error</p>
 
       <label for="description">Description</label>
-      <textarea id="description"  th:field="*{description}"  rows="3"
-                placeholder="A short description of the animal's personality"></textarea>
+      <textarea id="description" th:field="*{description}" th:classappend="${#fields.hasErrors('description')} ? 'invalid'"
+                rows="3" placeholder="A short description of the animal's personality"></textarea>
+      <p class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description error</p>
 
                   <label for="imageUrl">Image filename</label>
                   <input id="imageUrl" th:field="*{imageUrl}"  type="text"
-                    placeholder="luna.jpeg">
+                    placeholder="Luna.jpeg">
 
       <button type="submit">Add animal</button>
     </form>

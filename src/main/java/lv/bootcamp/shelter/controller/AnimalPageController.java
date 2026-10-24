@@ -1,4 +1,5 @@
 package lv.bootcamp.shelter.controller;
+
 import org.springframework.ui.Model;
 import lombok.RequiredArgsConstructor;
 import lv.bootcamp.shelter.service.AnimalService;
@@ -6,35 +7,42 @@ import org.springframework.stereotype.Controller;
 import lv.bootcamp.shelter.form.AnimalForm;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @RequiredArgsConstructor
 public class AnimalPageController {
-    private  final  AnimalService animalService;
+    private final AnimalService animalService;
 
     @GetMapping("/")
-    public  String index(){
+    public String index() {
         return "index";
     }
 
     @GetMapping("/animals")
-    public  String listAnimals(Model model){
-        model.addAttribute("animals",animalService.findAll());
+    public String listAnimals(Model model) {
+        model.addAttribute("animals", animalService.findAll());
         return "animals";
     }
 
     @GetMapping("/animals/new")
-    public  String newAnimalForm(Model model){
-        model.addAttribute("form",new AnimalForm(null,null,null,null,null,null));
+    public String newAnimalForm(Model model) {
+        model.addAttribute("form", new AnimalForm(null, null, null, null, null, null));
         return "animals-new";
     }
 
     @PostMapping("/animals")
-    public  String createAnimal(@ModelAttribute("form") AnimalForm form){
-       animalService.createFromForm(form);
-       return "redirect:/animals";
+    public String createAnimal(@Valid @ModelAttribute("form") AnimalForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            return "animals-new";
+        }
+        animalService.createFromForm(form);
+        redirectAttributes.addFlashAttribute("message", form.name() + " was added to the shelter.");
+        return "redirect:/animals";
     }
 
 }
