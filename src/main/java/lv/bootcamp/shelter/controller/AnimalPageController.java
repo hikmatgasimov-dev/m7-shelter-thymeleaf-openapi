@@ -44,5 +44,10 @@ public class AnimalPageController {
         redirectAttributes.addFlashAttribute("message", form.name() + " was added to the shelter.");
         return "redirect:/animals";
     }
+    @GetMapping("/login")
+    public String login() {
+
+        return "login";
+    }
 
 }

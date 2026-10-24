@@ -15,9 +15,14 @@
     <a href="/" class="active" aria-current="page">Home</a>
     <a href="/animals">All animals</a>
     <a href="/animals/new">Add animal</a>
+
+    <form th:action="@{/logout}" method="post">
+      <button type="submit" class="logout">Log out</button>
+    </form>
   </nav>
 
   <main>
+    <section class="hero">
     <h1>Welcome to the Shelter</h1>
     <p>We care for cats, dogs, and other animals looking for a loving home.</p>
     <p>Browse our available animals or register a new arrival.</p>
@@ -25,7 +30,7 @@
       <a href="/animals" class="btn">See all animals</a>
       <a href="/animals/new" class="btn secondary">Add animal</a>
     </div>
-
+    </section>
   </main>
 
 </body>

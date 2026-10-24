@@ -206,3 +206,18 @@ input.invalid, select.invalid, textarea.invalid { border: 2px solid var(--error)
 
 .alert p { margin: 0; }
 .alert ul { margin: 0.4rem 0 0; padding-left: 1.2rem; }
+
+
+/* ---------- Bonus: login page and log out button ---------- */
+.login-page { max-width: 440px; margin-top: 4rem; }
+.login-page h1 { text-align: center; }
+.login-page .subtitle { text-align: center; }
+
+nav form { margin-left: auto; }
+nav .logout {
+    background: transparent;
+    border: 2px solid #c7d2fe;
+    padding: 0.35rem 1rem;
+    font-size: 0.9rem;
+}
+nav .logout:hover { background: var(--primary-dark); transform: none; }

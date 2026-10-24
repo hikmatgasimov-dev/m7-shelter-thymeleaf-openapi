@@ -16,7 +16,10 @@
   <a href="/">Home</a>
   <a href="/animals" class="active" aria-current="page">All animals</a>
   <a href="/animals/new">Add animal</a>
-  <a href="/swagger-ui/index.html" class="btn secondary" target="_blank" rel="noopener">API documentation (Swagger UI)</a>
+
+  <form th:action="@{/logout}" method="post">
+    <button type="submit" class="logout">Log out</button>
+  </form>
 </nav>
 
 <main>
@@ -49,6 +52,8 @@
   </section>
 
   <a href="/animals/new" class="btn">Add new animal</a>
+
+  <a href="/swagger-ui/index.html" class="btn secondary" target="_blank" rel="noopener">API documentation (Swagger UI)</a>
 </main>
 
 </body>
