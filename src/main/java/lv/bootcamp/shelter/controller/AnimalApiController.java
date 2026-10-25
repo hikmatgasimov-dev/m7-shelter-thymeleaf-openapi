@@ -15,13 +15,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.media.Content;
 import java.util.List;
 
 /**
  * REST controller for shelter animal endpoints.
  * Returns JSON — does not render HTML pages.
  */
+@Tag(name = "Animals", description = "Manage shelter animals")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/animals")
@@ -29,11 +33,16 @@ public class AnimalApiController {
 
     private final AnimalService animalService;
 
+    @Operation(summary = "List all animals", description = "Returns every animal in the shelter, sorted by id.")
+    @ApiResponse(responseCode = "200", description = "Animals returned successfully")
     @GetMapping
     public List<AnimalResponse> findAll() {
         return animalService.findAll();
     }
 
+    @Operation(summary = "Get one animal", description = "Returns the animal with the given id.")
+    @ApiResponse(responseCode = "200", description = "Animal found")
+    @ApiResponse(responseCode = "404", description = "No animal with this id", content = @Content)
     @GetMapping("/{id}")
     public ResponseEntity<AnimalResponse> findById(@PathVariable Long id) {
         return animalService.findById(id)
@@ -44,6 +53,8 @@ public class AnimalApiController {
     /**
      * Lists adopted animals.
      */
+    @Operation(summary = "List adopted animals", description = "Returns only the animals that have been adopted.")
+    @ApiResponse(responseCode = "200", description = "Adopted animals returned successfully")
     @GetMapping("/adopted")
     public List<AnimalResponse> findAdopted() {
         return animalService.findAdopted();
@@ -52,6 +63,10 @@ public class AnimalApiController {
     /**
      * Creates a new animal.
      */
+    @Operation(summary = "Create an animal", description = "Adds a new animal with status AVAILABLE. "
+            + "If no image is given, a fallback image for the animal type is used.")
+    @ApiResponse(responseCode = "201", description = "Animal created")
+    @ApiResponse(responseCode = "400", description = "Invalid request body (for example a blank name)")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public AnimalResponse create(@RequestBody @Valid AnimalCreateRequest request) {
@@ -62,6 +77,10 @@ public class AnimalApiController {
      * Adopts an animal
      */
     @PostMapping("/{id}/adopt")
+    @Operation(summary = "Adopt an animal", description = "Marks the animal as ADOPTED and records today's date.")
+    @ApiResponse(responseCode = "200", description = "Animal adopted")
+    @ApiResponse(responseCode = "404", description = "No animal with this id", content = @Content)
+    @ApiResponse(responseCode = "409", description = "Animal is already adopted")
     public ResponseEntity<AnimalResponse> adopt(@PathVariable Long id) {
         return animalService.adopt(id)
                 .map(ResponseEntity::ok)
