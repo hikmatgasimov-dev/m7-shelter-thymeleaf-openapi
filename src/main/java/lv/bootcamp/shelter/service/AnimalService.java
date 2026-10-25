@@ -15,11 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Business logic for shelter animal management.
- * Delegates data storage to AnimalRepository.
- * Lombok generates the constructor for AnimalRepository injection.
- */
+
 @Service
 @RequiredArgsConstructor
 public class AnimalService {
@@ -46,11 +42,6 @@ public class AnimalService {
         return animalRepository.findById(id).map(this::toResponse);
     }
 
-    /**
-     * Returns all adopted animals, sorted by ID. Read-only, so it is a convenient way to
-     * exercise ROLE_ADMIN-only authorization (e.g. with a JWT) without any side effects —
-     * unlike {@code POST /api/animals}, calling this repeatedly does not create data.
-     */
     public List<AnimalResponse> findAdopted() {
         return animalRepository.findAll().stream()
                 .filter(animal -> animal.getStatus() == AnimalStatus.ADOPTED)
@@ -178,5 +169,21 @@ public class AnimalService {
             return null;
         }
         return "adopted on %s".formatted(details.adoptionDate());
+    }
+
+    /**
+     * Updates an existing animal with the values from the edit form.
+     * Returns empty if no animal has this id.
+     */
+    public Optional<AnimalResponse> update(Long id, AnimalForm form) {
+        return animalRepository.findById(id).map(animal -> {
+            animal.setName(form.name());
+            animal.setType(form.type());
+            animal.setBreed(form.breed());
+            animal.setAge(form.age());
+            animal.setDescription(form.description());
+            animal.setImageUrl(resolveImageUrl(form.imageUrl(), form.type()));
+            return toResponse(animalRepository.save(animal));
+        });
     }
 }

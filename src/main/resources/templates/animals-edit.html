@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shelter — Edit Animal</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<!-- Navigation — same on every page -->
+<nav>
+    <a class="brand" href="/">Animal Shelter</a>
+    <a href="/">Home</a>
+    <a href="/animals" class="active" aria-current="page">All animals</a>
+    <a href="/animals/new">Add animal</a>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" class="logout">Log out</button>
+    </form>
+</nav>
+
+<main>
+    <h1>Edit animal</h1>
+    <p class="subtitle">Update the details of this animal.</p>
+
+    <div class="form-card">
+        <form th:action="@{/animals/{id}/edit(id=${animalId})}" th:object="${form}" method="post">
+
+            <div class="alert" role="alert" th:if="${#fields.hasErrors('*')}">
+                <p>Please fix the following:</p>
+                <ul>
+                    <li th:each="err : ${#fields.allErrors()}" th:text="${err}">Error message</li>
+                </ul>
+            </div>
+
+            <label for="name">Name</label>
+            <input id="name" th:field="*{name}" th:classappend="${#fields.hasErrors('name')} ? 'invalid'"
+                   type="text" placeholder="e.g. Milo">
+            <p class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</p>
+
+            <label for="type">Type</label>
+            <select id="type" th:field="*{type}" th:classappend="${#fields.hasErrors('type')} ? 'invalid'">
+                <option value="">— choose —</option>
+                <option value="CAT">Cat</option>
+                <option value="DOG">Dog</option>
+                <option value="OTHER">Other</option>
+            </select>
+            <p class="error" th:if="${#fields.hasErrors('type')}" th:errors="*{type}">Type error</p>
+
+            <label for="breed">Breed</label>
+            <input id="breed" th:field="*{breed}" th:classappend="${#fields.hasErrors('breed')} ? 'invalid'"
+                   type="text" placeholder="e.g. Siamese">
+            <p class="error" th:if="${#fields.hasErrors('breed')}" th:errors="*{breed}">Breed error</p>
+
+            <label for="age">Age (years)</label>
+            <input id="age" th:field="*{age}" th:classappend="${#fields.hasErrors('age')} ? 'invalid'"
+                   type="number" min="0" placeholder="e.g. 3">
+            <p class="error" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age error</p>
+
+            <label for="description">Description</label>
+            <textarea id="description" th:field="*{description}" th:classappend="${#fields.hasErrors('description')} ? 'invalid'"
+                      rows="3" placeholder="A short description of the animal's personality"></textarea>
+            <p class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description error</p>
+
+            <label for="imageUrl">Image filename</label>
+            <input id="imageUrl" th:field="*{imageUrl}" type="text" placeholder="Luna.jpeg">
+
+            <button type="submit">Save changes</button>
+        </form>
+    </div>
+
+    <a href="/animals" class="btn secondary back-link">Cancel</a>
+</main>
+
+</body>
+</html>

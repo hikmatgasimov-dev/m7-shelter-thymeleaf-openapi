@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequiredArgsConstructor
@@ -48,6 +48,38 @@ public class AnimalPageController {
     public String login() {
 
         return "login";
+    }
+    @GetMapping("/animals/{id}/edit")
+    public  String editAnimalForm(@PathVariable Long id,Model model,RedirectAttributes redirectAttribute){
+
+        return animalService.findById(id)
+                .map(animal->{
+                    model.addAttribute("form",new AnimalForm(animal.name(),animal.type(),animal.breed(),animal.age(), animal.description(),animal.imageUrl()));
+                    model.addAttribute("animalId",id);
+                    return  "animals-edit";
+                })
+                .orElseGet(()->{
+                           redirectAttribute.addFlashAttribute("error","Animal not found");
+                    return  "redirect:/animals";
+
+                });
+    }
+    @PostMapping("/animals/{id}/edit")
+    public  String updateAnimal(@PathVariable Long id,@Valid @ModelAttribute("form") AnimalForm form,
+                                BindingResult bindingResult,Model model,RedirectAttributes redirectAttributes){
+
+
+        if(bindingResult.hasErrors()){
+            model.addAttribute("animalId",id);
+            return "animals-edit";
+        }
+        if(animalService.update(id,form).isEmpty()){
+            redirectAttributes.addFlashAttribute("error", "Animal not found.");
+                    }
+        else{
+            redirectAttributes.addFlashAttribute("message", form.name() + " was updated.");
+        }
+        return  "redirect:/animals";
     }
 
 }

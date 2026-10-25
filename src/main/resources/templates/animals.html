@@ -27,6 +27,7 @@
 
   <p class="subtitle">Meet the animals waiting for a home.</p>
   <p class="notice" role="status" th:if="${message}" th:text="${message}">Message</p>
+  <p class="alert" role="alert" th:if="${error}" th:text="${error}">Error</p>
   <section aria-label="Animal list">
     <ul class="animal-grid">
       <li class="animal-card" th:each="animal : ${animals}">
@@ -46,6 +47,9 @@
                 th:text="${animal.status}"
                 th:classappend="${animal.status.name() == 'AVAILABLE'} ? 'status-available' : 'status-adopted'">STATUS</span>
           <p class="description" th:text="${animal.description}">Description</p>
+          <div class="card-actions">
+            <a class="btn secondary small" th:href="@{/animals/{id}/edit(id=${animal.id})}">Edit</a>
+          </div>
         </div>
       </li>
     </ul>
