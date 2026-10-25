@@ -20,6 +20,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.Parameter;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 
@@ -91,6 +93,33 @@ public class AnimalApiController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Update an animal", description = "Replaces the details of an existing animal. "
+            + "If no image is given, a fallback image for the animal type is used.")
+    @ApiResponse(responseCode = "200", description = "Animal updated")
+    @ApiResponse(responseCode = "400", description = "Invalid request body (for example a blank name)")
+    @ApiResponse(responseCode = "404", description = "No animal with this id", content = @Content)
+    @PutMapping("/{id}")
+    public ResponseEntity<AnimalResponse> update(
+            @Parameter(description = "Id of the animal to update", example = "1") @PathVariable Long id,
+            @RequestBody @Valid AnimalCreateRequest request) {
+        return animalService.update(id, request)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
+     * Deletes an animal.
+     */
+    @Operation(summary = "Delete an animal", description = "Removes the animal with the given id.")
+    @ApiResponse(responseCode = "204", description = "Animal deleted")
+    @ApiResponse(responseCode = "404", description = "No animal with this id", content = @Content)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(
+            @Parameter(description = "Id of the animal to delete", example = "1") @PathVariable Long id) {
+        return animalService.delete(id)
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
+    }
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<String> handleAlreadyAdopted(IllegalStateException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());

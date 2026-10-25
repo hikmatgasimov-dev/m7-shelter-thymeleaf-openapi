@@ -194,4 +194,12 @@ public class AnimalService {
             return toResponse(animalRepository.save(animal));
         });
     }
+    /**
+     * Updates an existing animal from a REST request.
+     * Returns empty if no animal has this id.
+     */
+    public Optional<AnimalResponse> update(Long id, AnimalCreateRequest request) {
+        return update(id, new AnimalForm(request.name(), request.type(), request.breed(),
+                request.age(), request.description(), request.imageUrl()));
+    }
 }
