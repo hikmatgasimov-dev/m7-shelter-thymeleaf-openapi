@@ -83,7 +83,12 @@ public class AnimalRepository {
         store.put(animal.getId(), animal);
         return animal;
     }
-
+    /**
+     * Removes an animal. Returns true if an animal with this ID existed.
+     */
+    public boolean delete(Long id) {
+        return store.remove(id) != null;
+    }
     private void seed(String name, AnimalType type, String breed, int age,
                       String description, String imageUrl, AnimalStatus status,
                       AdoptionDetails adoptionDetails) {

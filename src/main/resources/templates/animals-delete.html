@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shelter — Delete Animal</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<!-- Navigation — same on every page -->
+<nav>
+    <a class="brand" href="/">Animal Shelter</a>
+    <a href="/">Home</a>
+    <a href="/animals" class="active" aria-current="page">All animals</a>
+    <a href="/animals/new">Add animal</a>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" class="logout">Log out</button>
+    </form>
+</nav>
+
+<main>
+    <h1>Delete animal</h1>
+    <p class="subtitle">This cannot be undone.</p>
+
+    <div class="form-card">
+        <img th:src="${animal.imageUrl}"
+             th:alt="${animal.name}"
+             width="300"
+             height="200"
+             style="object-fit: cover; border-radius: 8px;">
+        <p>Are you sure you want to delete <strong th:text="${animal.name}">Name</strong>
+            (<span th:text="${animal.type}">Type</span>)?</p>
+
+        <form th:action="@{/animals/{id}/delete(id=${animal.id})}" method="post">
+            <button type="submit" class="danger">Yes, delete</button>
+        </form>
+    </div>
+
+    <a href="/animals" class="btn secondary back-link">Cancel</a>
+</main>
+
+</body>
+</html>

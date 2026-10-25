@@ -35,6 +35,34 @@ public class AnimalPageController {
         return "animals-new";
     }
 
+    @GetMapping("/animals/{id}/delete")
+    public String confirmDelete(@PathVariable Long id, Model model,
+                                RedirectAttributes redirectAttributes) {
+
+       return  animalService.findById(id)
+               .map(animal->{
+                   model.addAttribute("animal",animal);
+                   return "animals-delete";
+               })
+               .orElseGet(() -> {
+                   redirectAttributes.addFlashAttribute("error", "Animal not found.");
+                   return "redirect:/animals";
+               });
+    }
+    @PostMapping("/animals/{id}/delete")
+    public String deleteAnimal(@PathVariable Long id , RedirectAttributes redirectAttributes) {
+        String name = animalService.findById(id).map(animal -> animal.name()).orElse(null);
+
+        if(name!=null&&animalService.delete(id)){
+            redirectAttributes.addFlashAttribute("message",name+ " was deleted.");
+        }
+        else{
+            redirectAttributes.addFlashAttribute("error","Animal not found ");
+        }
+        return "redirect:/animals";
+    }
+
+
     @PostMapping("/animals")
     public String createAnimal(@Valid @ModelAttribute("form") AnimalForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {

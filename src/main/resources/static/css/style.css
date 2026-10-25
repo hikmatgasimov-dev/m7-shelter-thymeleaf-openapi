@@ -226,3 +226,7 @@ nav .logout:hover { background: var(--primary-dark); transform: none; }
 /* ---------- Additional: edit and delete ---------- */
 .card-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
 .btn.small { padding: 0.35rem 0.9rem; font-size: 0.9rem; }
+
+
+.btn.danger, button.danger { background: var(--error); }
+.btn.danger:hover, button.danger:hover { background: #991b1b; }

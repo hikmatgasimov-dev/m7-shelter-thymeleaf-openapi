@@ -172,9 +172,17 @@ public class AnimalService {
     }
 
     /**
+     * Deletes an animal. Returns false if no animal has this id.
+     */
+    public boolean delete(Long id) {
+        return animalRepository.delete(id);
+    }
+
+    /**
      * Updates an existing animal with the values from the edit form.
      * Returns empty if no animal has this id.
      */
+
     public Optional<AnimalResponse> update(Long id, AnimalForm form) {
         return animalRepository.findById(id).map(animal -> {
             animal.setName(form.name());

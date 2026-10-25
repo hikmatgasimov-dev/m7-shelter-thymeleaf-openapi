@@ -49,6 +49,7 @@
           <p class="description" th:text="${animal.description}">Description</p>
           <div class="card-actions">
             <a class="btn secondary small" th:href="@{/animals/{id}/edit(id=${animal.id})}">Edit</a>
+            <a class="btn danger small" th:href="@{/animals/{id}/delete(id=${animal.id})}">Delete</a>
           </div>
         </div>
       </li>
