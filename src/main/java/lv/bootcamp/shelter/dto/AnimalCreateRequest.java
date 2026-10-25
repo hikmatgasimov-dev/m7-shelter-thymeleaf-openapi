@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lv.bootcamp.shelter.model.AnimalType;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * JSON request body for creating a new animal via the REST API.
@@ -11,18 +12,25 @@ import lv.bootcamp.shelter.model.AnimalType;
  */
 public record AnimalCreateRequest(
 
+        @Schema(description = "Animal name", example = "Milo")
         @NotBlank(message = "Name is required")
         String name,
 
+        @Schema(description = "Animal type", example = "CAT")
         @NotNull(message = "Type is required")
         AnimalType type,
 
+        @Schema(description = "Breed of the animal", example = "Siamese")
         String breed,
 
+        @Schema(description = "Age in years, zero or more", example = "3")
         @Min(value = 0, message = "Age cannot be negative")
         Integer age,
 
+        @Schema(description = "Short description of the animal's personality", example = "Calm and affectionate")
         String description,
 
+        @Schema(description = "Image filename or full http(s) URL. Leave empty to use a fallback image",
+                example = "Luna.jpeg")
         String imageUrl
 ) {}

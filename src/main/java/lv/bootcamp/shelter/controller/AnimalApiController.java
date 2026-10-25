@@ -19,6 +19,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.Parameter;
+
 import java.util.List;
 
 /**
@@ -44,7 +46,8 @@ public class AnimalApiController {
     @ApiResponse(responseCode = "200", description = "Animal found")
     @ApiResponse(responseCode = "404", description = "No animal with this id", content = @Content)
     @GetMapping("/{id}")
-    public ResponseEntity<AnimalResponse> findById(@PathVariable Long id) {
+    public ResponseEntity<AnimalResponse> findById(
+            @Parameter(description = "Id of the animal", example = "1") @PathVariable Long id) {
         return animalService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -81,7 +84,8 @@ public class AnimalApiController {
     @ApiResponse(responseCode = "200", description = "Animal adopted")
     @ApiResponse(responseCode = "404", description = "No animal with this id", content = @Content)
     @ApiResponse(responseCode = "409", description = "Animal is already adopted")
-    public ResponseEntity<AnimalResponse> adopt(@PathVariable Long id) {
+    public ResponseEntity<AnimalResponse>adopt(
+            @Parameter(description = "Id of the animal to adopt", example = "1") @PathVariable Long id)  {
         return animalService.adopt(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
